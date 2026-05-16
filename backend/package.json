@@ -5,7 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsx watch src/server.ts",
-    "start": "node dist/server.js",
+    "start": "tsx src/server.ts",
     "build": "tsc",
     "seed": "tsx src/seed.ts",
     "test:email": "tsx src/testEmail.ts"
