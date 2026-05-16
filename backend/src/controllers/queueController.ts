@@ -11,7 +11,7 @@ export const getQueue = async (req: Request, res: Response) => {
     const { doctorId, date } = req.query;
     if (!doctorId || !date) return res.status(400).json({ message: 'Doctor ID and date are required' });
 
-    const queue = await QueueToken.find({ doctorId, date: date as string })
+    const queue = await QueueToken.find({ doctorId: doctorId as string, date: date as string })
         .populate('patientId', 'patientName phone')
         .populate('appointmentId', 'startTime endTime')
         .sort({ queuePosition: 1 });
@@ -98,18 +98,18 @@ export const syncQueue = async (req: AuthRequest, res: Response) => {
 
     // Find appointments for this doctor and date that are not in queue yet
     const appointments = await Appointment.find({
-        doctorId,
+        doctorId: doctorId as string,
         date: date as string,
         status: { $in: [AppointmentStatus.SCHEDULED, AppointmentStatus.CHECKED_IN] }
     });
 
-    const existingAppointmentIds = (await QueueToken.find({ doctorId, date: date as string }))
+    const existingAppointmentIds = (await QueueToken.find({ doctorId: doctorId as string, date: date as string }))
         .map(t => t.appointmentId?.toString())
         .filter(id => id);
 
     const newAppointments = appointments.filter(a => !existingAppointmentIds.includes(a._id.toString()));
 
-    let lastToken = await QueueToken.findOne({ doctorId, date: date as string }).sort({ tokenNumber: -1 });
+    let lastToken = await QueueToken.findOne({ doctorId: doctorId as string, date: date as string }).sort({ tokenNumber: -1 });
     let tokenNumber = lastToken?.tokenNumber || 0;
     let queuePosition = lastToken?.queuePosition || 0;
 

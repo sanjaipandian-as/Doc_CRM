@@ -118,7 +118,7 @@ export const createAppointmentType = async (req: AuthRequest, res: Response) => 
 // Schedules
 export const getSchedules = async (req: Request, res: Response) => {
     const { doctorId } = req.query;
-    const filter = doctorId ? { doctorId } : {};
+    const filter = doctorId ? { doctorId: doctorId as string } : {};
     const schedules = await DoctorScheduleTemplate.find(filter).populate('doctorId', 'name');
     res.json(schedules);
 };
@@ -245,7 +245,7 @@ export const deleteSchedule = async (req: AuthRequest, res: Response) => {
 // Leaves
 export const getLeaves = async (req: Request, res: Response) => {
     const { doctorId } = req.query;
-    const filter = doctorId ? { doctorId } : {};
+    const filter = doctorId ? { doctorId: doctorId as string } : {};
     const leaves = await DoctorLeave.find(filter).populate('doctorId', 'name');
     res.json(leaves);
 };
