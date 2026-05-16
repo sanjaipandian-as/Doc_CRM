@@ -19,7 +19,11 @@ connectDB();
 const app = express();
 
 app.use(cors({
-    origin: process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : 'https://doc-crm-one.vercel.app',
+    origin: [
+        'http://localhost:5173',
+        'https://doc-crm-one.vercel.app',
+        ...(process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : [])
+    ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
